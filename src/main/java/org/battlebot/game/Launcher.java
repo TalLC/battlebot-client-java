@@ -8,42 +8,28 @@ public class Launcher {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 	public static void main(String[] args) throws Exception {
 		LOGGER.info("Démarrage du bot");
-		Configuration cfg = new Configuration();
+		String serverHost = "localhost";
+		Configuration cfg = new Configuration("http://"  + serverHost, 8000,
+				serverHost, 1883, "user","password",
+				serverHost, 61613, "user","password");
 		final GameManager gameMgr = new GameManager(cfg);
 		
 		if(gameMgr.register("team-id-1", "Warlock")) {
 			gameMgr.startGame(
-			()-> {
-				
+			(BotConfiguration botConfig)-> {
 				try {
 					gameMgr.actionTurnRight();
-					Thread.sleep(1000000);
-				} catch (Exception e1) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				try {
-					for(int i=1; i<1000; i++) {
-						gameMgr.actionMoveForward();
-						Thread.sleep(1000);
-						gameMgr.actionMoveStop();
-						Thread.sleep(1000);
-						gameMgr.actionTurnRight();
-						Thread.sleep(1000);
-						gameMgr.actionMoveForward();
-						Thread.sleep(1000);
-						gameMgr.actionFire(0);
-						Thread.sleep(1000);
-					}
-				}catch(Exception e) {
 					e.printStackTrace();
 				}
 			},
-			(status) -> {
-				
+			(message,type) -> {
+				LOGGER.info("Message[" + type.name() + "] : " + message.toString());
 			}, 
 			(detection) -> {
 				LOGGER.info("Detect : " + detection.toString());
+				
 			});
 		}
 	}

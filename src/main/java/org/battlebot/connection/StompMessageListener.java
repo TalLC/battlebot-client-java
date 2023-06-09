@@ -33,6 +33,7 @@ public abstract class StompMessageListener implements Runnable {
 
 	@Override
 	public void run() {
+		LOGGER.debug("Démarrage écoute message Stomp ", cnx);
 		while(!stop) {
 			try {
 				StompFrame frame = cnx.receive(RECEIVE_DELAY);
@@ -46,6 +47,7 @@ public abstract class StompMessageListener implements Runnable {
 				stop = true;
 			}
 		}
+		LOGGER.debug("Arret écoute message Stomp ", cnx);
 		
 	}
 }

@@ -31,9 +31,11 @@ public class StandardStatusMessageListener extends StompMessageListener {
 				stop();
 				stopCallback.onStop();
 			} else {
-				StatusMessage statusMessage = MAPPER.readValue(message, StatusMessage.class);
-				LOGGER.info(statusMessage.toString());
-				listener.onStatusMessage(statusMessage);
+				StatusMessageType messageType = Enum.valueOf(StatusMessageType.class, type);
+				
+				Object objectMessage = MAPPER.readValue(message, messageType.associatedClass());
+				LOGGER.info(message.toString());
+				listener.onStatusMessage(objectMessage, messageType);
 			}
 
 		}

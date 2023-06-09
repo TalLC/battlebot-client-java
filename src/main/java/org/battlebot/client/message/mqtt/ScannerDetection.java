@@ -2,26 +2,11 @@ package org.battlebot.client.message.mqtt;
 
 import java.util.List;
 
-public class ScannerDetection {
-	private String msg_type;
-	private String source;
+import org.battlebot.client.message.CoreDataMessage;
+
+public class ScannerDetection extends CoreDataMessage{
 	private List<Data> data;
 
-	public String getMsg_type() {
-		return msg_type;
-	}
-
-	public void setMsg_type(String msg_type) {
-		this.msg_type = msg_type;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
 
 	public List<Data> getData() {
 		return data;

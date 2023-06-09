@@ -1,7 +1,9 @@
 package org.battlebot.client.message.stomp;
 
+import org.battlebot.connection.StatusMessageType;
+
 @FunctionalInterface
 public interface StatusListener {
 	
-	void onStatusMessage(StatusMessage status);
+	void onStatusMessage(Object message, StatusMessageType messageType);
 }

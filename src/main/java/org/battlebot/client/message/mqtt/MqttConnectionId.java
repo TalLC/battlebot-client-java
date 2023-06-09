@@ -1,45 +1,10 @@
 package org.battlebot.client.message.mqtt;
 
-public class MqttConnectionId {
-	private String msg_type;
-	private String source;
-	private Data data;
+import org.battlebot.client.message.SimpleDataMessage;
 
-	public String getMsg_type() {
-		return msg_type;
-	}
-
-	public void setMsg_type(String msg_type) {
-		this.msg_type = msg_type;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
-	public Data getData() {
-		return data;
-	}
-
-	public void setData(Data data) {
-		this.data = data;
-	}
-	
-	public class Data{
-		private String value;
-
-		public String getValue() {
-			return value;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-		
-		
+public class MqttConnectionId extends SimpleDataMessage<String>{
+	@Override
+	public String toString() {
+		return "Mqtt Connection ID : " + getData().getValue();
 	}
 }

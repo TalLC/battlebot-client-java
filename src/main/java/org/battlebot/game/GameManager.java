@@ -13,8 +13,12 @@ import org.battlebot.connection.MqttConnexionIdListener;
 import org.battlebot.connection.RestCommunication;
 import org.battlebot.connection.StandardStatusMessageListener;
 import org.battlebot.connection.StartGameCallback;
-import org.battlebot.connection.StompConnectionIdListener;
-import org.battlebot.connection.StompStartGame;
+import org.battlebot.connection.startermessage.StompBotHealth;
+import org.battlebot.connection.startermessage.StompBotMovingSpeed;
+import org.battlebot.connection.startermessage.StompBotTurningSpeed;
+import org.battlebot.connection.startermessage.StompBotWeaponCooldown;
+import org.battlebot.connection.startermessage.StompConnectionIdListener;
+import org.battlebot.connection.startermessage.StompStartGame;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
@@ -61,18 +65,19 @@ public class GameManager {
 		MqttClient mqttClient = null;
 		boolean res = false;
 		try {
-			StompConnectionIdListener stompListener = new StompConnectionIdListener(stompCnx);
-			mqttClient = cnxMgr.getScannerMqttClient(botId, mqttListener);
-			
 			//rédupération des id de connexion
+			
+			StompConnectionIdListener stompListener = new StompConnectionIdListener(stompCnx);
 			stompCnxId = stompListener.get(5, TimeUnit.SECONDS);
 			LOGGER.info("Get stomp validation id : " + stompCnxId);
+			
+			mqttClient = cnxMgr.getScannerMqttClient(botId, mqttListener);
 			mqttCnxId = mqttListener.get(5, TimeUnit.SECONDS);
 			LOGGER.info("Get mqtt validation id : " + mqttCnxId);
 			
 			res = rest.checkConnection(botId, regId, mqttCnxId, stompCnxId);
 		}finally {
-			stompCnx.close();
+			//stompCnx.close();
 		} 
 		
 		return res;
@@ -85,10 +90,20 @@ public class GameManager {
 	 */
 	public void startGame(StartGameCallback starter, StatusListener statusListener, ScannerDetectionListener scannerListener) throws Exception {
 		StompConnection stompCnx = cnxMgr.getStatusStompConnection(botId);
+		
+		LOGGER.info("Read bot configuration ...");
+		int health = new StompBotHealth(stompCnx).get(5, TimeUnit.SECONDS);
+		float movingSpeed = new StompBotMovingSpeed(stompCnx).get(5, TimeUnit.SECONDS);
+		float turningSpeed = new StompBotTurningSpeed(stompCnx).get(5, TimeUnit.SECONDS);
+		int weaponCooldown = new StompBotWeaponCooldown(stompCnx).get(5, TimeUnit.SECONDS);
+		
+		BotConfiguration botConf = new BotConfiguration(health, movingSpeed, turningSpeed, weaponCooldown);
+		LOGGER.info("Your bot configuration : " + botConf);
 		LOGGER.info("Wait game start ...");
 		StompStartGame startGame = new StompStartGame(stompCnx);
 		boolean res = startGame.get(60, TimeUnit.SECONDS);
-		stompCnx.close();
+		
+		//stompCnx.close();
 		LOGGER.info("Game started");
 		//En cas de démarrage on souscrit aux messages de status et de scanner
 		if(res) {
@@ -97,7 +112,7 @@ public class GameManager {
 			StandardStatusMessageListener stdStatusListener = new StandardStatusMessageListener(gameStompCnx, statusListener, () -> {
 				LOGGER.info("Fin de partie");
 				try {
-					gameStompCnx.close();
+					cnxMgr.closeStompConnexion();
 				} catch (IOException e1) {
 					LOGGER.error("Fermeture de la connection STOMP", e1);
 				}
@@ -108,7 +123,7 @@ public class GameManager {
 				}
 			});
 			stdStatusListener.start();
-			starter.onStart();
+			starter.onStart(botConf);
 			
 		}
 	}

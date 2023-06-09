@@ -1,5 +1,7 @@
 package org.battlebot.connection;
 
+import java.io.IOException;
+
 import org.apache.activemq.transport.stomp.Stomp.Headers.Subscribe;
 import org.apache.activemq.transport.stomp.StompConnection;
 import org.apache.http.client.methods.HttpGet;
@@ -20,6 +22,7 @@ public class ConnectionManager {
 	public final static String MQTT_ROOT_DESTINATION = "BATTLEBOT/BOT/";
 	private Configuration config;
 	private MqttClient mqttClient;
+	private StompConnection stompConnection;
 	public ConnectionManager(Configuration cfg) {
 		config = cfg;
 	}
@@ -39,13 +42,20 @@ public class ConnectionManager {
 	}
 	
 	public StompConnection getStatusStompConnection(String botId) throws Exception {
-		StompConnection stompConnection = new StompConnection();
-		stompConnection.open(config.getStompServer(), config.getStompPort());
-		stompConnection.connect(config.getStompUsername(), config.getStompPassword());
-		stompConnection.subscribe(STOMP_ROOT_DESTINATION + botId, Subscribe.AckModeValues.AUTO);
-		
-		LOGGER.info("Start listening stomp queue " +  STOMP_ROOT_DESTINATION + botId);
+		if(stompConnection == null) {
+			stompConnection = new StompConnection();
+			stompConnection.open(config.getStompServer(), config.getStompPort());
+			stompConnection.connect(config.getStompUsername(), config.getStompPassword());
+			stompConnection.subscribe(STOMP_ROOT_DESTINATION + botId, Subscribe.AckModeValues.AUTO);
+			
+			LOGGER.info("Start listening stomp queue " +  STOMP_ROOT_DESTINATION + botId);
+		}
 		return stompConnection;
+	}
+	
+	public void closeStompConnexion() throws IOException {
+		stompConnection.close();
+		stompConnection = null;
 	}
 
 	
