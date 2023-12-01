@@ -41,9 +41,9 @@ public class GameManager {
 	
 	/**
 	 * Enregistrement du bot dans la partie
-	 * @param teamId nom de l'équipe
+	 * @param teamId nom de l'ï¿½quipe
 	 * @param botName nom du bot
-	 * @return état de l'enreigistrement
+	 * @return ï¿½tat de l'enreigistrement
 	 * @throws Exception
 	 */
 	public boolean register(String teamId, String botName) throws Exception {
@@ -54,18 +54,18 @@ public class GameManager {
 		String stompCnxId = null;
 		String mqttCnxId = null;
 		
-		//récupération du session Id
+		//rï¿½cupï¿½ration du session Id
 		String regId = rest.getRegistrationId(botId);
 		LOGGER.info("Receive registration id : " + regId);
 		
-		//vérification de la connexion Stomp & Mqtt
+		//vï¿½rification de la connexion Stomp & Mqtt
 		LOGGER.info("Check mqtt & stomp connection");
 		StompConnection stompCnx = cnxMgr.getStatusStompConnection(botId);
 		MqttConnexionIdListener mqttListener = new  MqttConnexionIdListener();
 		MqttClient mqttClient = null;
 		boolean res = false;
 		try {
-			//rédupération des id de connexion
+			//rï¿½dupï¿½ration des id de connexion
 			
 			StompConnectionIdListener stompListener = new StompConnectionIdListener(stompCnx);
 			stompCnxId = stompListener.get(5, TimeUnit.SECONDS);
@@ -84,7 +84,7 @@ public class GameManager {
 	}
 	
 	/**
-	 * Attente du démarrage du jeux
+	 * Attente du dï¿½marrage du jeux
 	 * @return
 	 * @throws Exception
 	 */
@@ -103,9 +103,8 @@ public class GameManager {
 		StompStartGame startGame = new StompStartGame(stompCnx);
 		boolean res = startGame.get(60, TimeUnit.SECONDS);
 		
-		//stompCnx.close();
 		LOGGER.info("Game started");
-		//En cas de démarrage on souscrit aux messages de status et de scanner
+		//En cas de dï¿½marrage on souscrit aux messages de status et de scanner
 		if(res) {
 			MqttClient mqttClient = cnxMgr.getScannerMqttClient(botId, new StandardScannerMessageListener(scannerListener));
 			final StompConnection gameStompCnx = cnxMgr.getStatusStompConnection(botId);
@@ -129,7 +128,7 @@ public class GameManager {
 	}
 	
 	/**
-	 * Déclenchement d'une action tourner à gauche
+	 * Dï¿½clenchement d'une action tourner ï¿½ gauche
 	 * @return
 	 * @throws Exception
 	 */
@@ -139,7 +138,7 @@ public class GameManager {
 	
 	
 	/**
-	 * Déclenchement d'une action tourner à droite
+	 * Dï¿½clenchement d'une action tourner ï¿½ droite
 	 * @return
 	 * @throws Exception
 	 */
@@ -149,7 +148,7 @@ public class GameManager {
 	
 	
 	/**
-	 * Déclenchement d'une action d'arreter de tourner
+	 * Dï¿½clenchement d'une action d'arreter de tourner
 	 * @return
 	 * @throws Exception
 	 */
@@ -159,17 +158,17 @@ public class GameManager {
 	
 	
 	/**
-	 * Tir selon un angle donné
+	 * Tir selon un angle donnï¿½
 	 * @param angle angle de tir
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean actionFire(int angle) throws Exception {
+	public boolean actionFire(float angle) throws Exception {
 		return rest.shoot(botId, angle);
 	}
 	
 	/**
-	 * Déclenchement d'une action d'avancer
+	 * Dï¿½clenchement d'une action d'avancer
 	 * @return
 	 * @throws Exception
 	 */
@@ -178,7 +177,7 @@ public class GameManager {
 	}
 	
 	/**
-	 * Déclenchement d'une actionde s'arreter
+	 * Dï¿½clenchement d'une actionde s'arreter
 	 * @return
 	 * @throws Exception
 	 */

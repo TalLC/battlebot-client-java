@@ -1,14 +1,14 @@
 package org.battlebot.client.message.command;
 
 public class FireRequest {
-	private int angle;
+	private float angle;
 
-	public FireRequest(int ang) {
+	public FireRequest(float ang) {
 		super();
 		this.angle = ang;
 	}
 
-	public int getAngle() {
+	public float getAngle() {
 		return angle;
 	};
 }

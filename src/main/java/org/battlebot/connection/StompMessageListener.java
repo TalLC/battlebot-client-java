@@ -33,7 +33,7 @@ public abstract class StompMessageListener implements Runnable {
 
 	@Override
 	public void run() {
-		LOGGER.debug("Démarrage écoute message Stomp ", cnx);
+		LOGGER.debug("Dï¿½marrage ï¿½coute message Stomp ", cnx);
 		while(!stop) {
 			try {
 				StompFrame frame = cnx.receive(RECEIVE_DELAY);
@@ -41,13 +41,13 @@ public abstract class StompMessageListener implements Runnable {
 					onMessage(frame.getBody());
 				}
 			} catch(SocketTimeoutException e) {
-				//normal c'est pour pouvoir arreter l'écoute
+				//normal c'est pour pouvoir arreter l'ï¿½coute
 			}catch (Exception e) {
-				LOGGER.debug("Réception message stomp :", e);
+				LOGGER.debug("Rï¿½ception message stomp :", e);
 				stop = true;
 			}
 		}
-		LOGGER.debug("Arret écoute message Stomp ", cnx);
+		LOGGER.debug("Arret ï¿½coute message Stomp ", cnx);
 		
 	}
 }

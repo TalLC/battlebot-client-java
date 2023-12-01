@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 public class Launcher {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 	public static void main(String[] args) throws Exception {
-		LOGGER.info("Démarrage du bot");
+		LOGGER.info("DÃ©marrage du bot");
 		String serverHost = "localhost";
 		Configuration cfg = new Configuration("http://"  + serverHost, 8000,
 				serverHost, 1883, "user","password",

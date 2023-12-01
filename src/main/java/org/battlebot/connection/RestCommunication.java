@@ -40,7 +40,7 @@ public class RestCommunication {
 	/**
 	 * Engristrement du bot
 	 * 
-	 * @param teamId  identifiant de l'équipe
+	 * @param teamId  identifiant de l'ï¿½quipe
 	 * @param botName nom du bot
 	 * @return id du bot
 	 * @throws Exception
@@ -74,7 +74,7 @@ public class RestCommunication {
 	}
 
 	/**
-	 * Récupération de l'identifiant de validation de connecttion
+	 * Rï¿½cupï¿½ration de l'identifiant de validation de connecttion
 	 * 
 	 * @param botId identifiant du bot qui se connecte
 	 * @return identifiant de session pour la validation des connections
@@ -92,7 +92,7 @@ public class RestCommunication {
 	}
 
 	/**
-	 * Envoie des identifications de connexion pour terminer la procédure
+	 * Envoie des identifications de connexion pour terminer la procï¿½dure
 	 * d'enregistrement du bot
 	 * 
 	 * @param botId     identifiant du bot
@@ -102,7 +102,7 @@ public class RestCommunication {
 	 * @return true si l'enregistrement est correct
 	 */
 	public boolean checkConnection(String botId, String sessionId, String mqttId, String stompId) throws Exception {
-		LOGGER.info("Vérification de la connection pour bot " + botId + "(sessionId = " + sessionId + ",mqttId = "
+		LOGGER.info("Vï¿½rification de la connection pour bot " + botId + "(sessionId = " + sessionId + ",mqttId = "
 				+ mqttId + ", stompId = " + stompId);
 
 		CheckConnectionRequest req = new CheckConnectionRequest(sessionId, mqttId, stompId);
@@ -121,7 +121,7 @@ public class RestCommunication {
 		return cnxOK;
 	}
 
-	public boolean shoot(String botId, int angle) throws Exception {
+	public boolean shoot(String botId, float angle) throws Exception {
 		LOGGER.info("Transmission de l'ordre de tir " + angle);
 		boolean ok = false;
 		FireRequest req = new FireRequest(angle);
@@ -177,7 +177,7 @@ public class RestCommunication {
 	}
 
 	public boolean move(String botId, String action) throws Exception {
-		LOGGER.info("Transmission de se déplacer " + action);
+		LOGGER.info("Transmission de se dï¿½placer " + action);
 		boolean ok = false;
 		ForwardRequest req = new ForwardRequest(action);
 
